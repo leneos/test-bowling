@@ -1,0 +1,28 @@
+.ScoreBox {
+  width: 60px;
+  height: 60px;
+  background-color: aliceblue;
+  margin: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  p {
+    display: block;
+    margin: 0;
+  }
+  .tries {
+    display: flex;
+    flex-basis: auto;
+    justify-content: flex-end;
+    .try {
+      border: 1px solid black;
+      border-radius: 2px;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
