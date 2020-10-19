@@ -52,6 +52,7 @@ export const Scoreboard = () => {
           <>
             <p>Всего: {roundScore[roundScore.length - 1]}</p>
             <Button
+              className="btn btn-primary"
               onClick={() => dispatch(restartGame())}
               btnTitle="Restart Game"
             />
