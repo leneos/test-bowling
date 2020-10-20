@@ -42,11 +42,7 @@ export const appSlice = createSlice({
     updateScore: (state, action) => {
       updateGameScreen(state, action);
       updateRoundScore(state, action);
-      if (state.currentRound < 9) {
-        nineRoundsScoreUpdate(state, action);
-      } else if (state.currentRound === 9) {
-        tenthRoundScoreUpdate(state, action);
-      }
+      updateHitBox(state, action);
     },
   },
 });
@@ -95,18 +91,28 @@ const updateRoundScore = (state, action) => {
       game[currentRound - 1].firstTry === 10 &&
       game[currentRound].firstTry + hitPins !== 10
     ) {
-      roundsScore.splice(
-        currentRound - 1,
-        0,
-        10 +
-          game[currentRound].firstTry +
-          hitPins +
-          roundsScore[currentRound - 2]
-      );
-
-      roundsScore.push(
-        game[currentRound].firstTry + hitPins + roundsScore[currentRound - 1]
-      );
+      if (currentRound === 1) {
+        roundsScore.splice(
+          currentRound - 1,
+          0,
+          10 + game[currentRound].firstTry + hitPins
+        );
+        roundsScore.push(
+          game[currentRound].firstTry + hitPins + roundsScore[currentRound - 1]
+        );
+      } else {
+        roundsScore.splice(
+          currentRound - 1,
+          0,
+          10 +
+            game[currentRound].firstTry +
+            hitPins +
+            roundsScore[currentRound - 2]
+        );
+        roundsScore.push(
+          game[currentRound].firstTry + hitPins + roundsScore[currentRound - 1]
+        );
+      }
     } else if (
       currentRound > 1 &&
       game[currentRound - 2].firstTry === 10 &&
@@ -205,51 +211,50 @@ const updateRoundScore = (state, action) => {
     }
   }
 };
-const tenthRoundScoreUpdate = (state, action) => {
+const updateHitBox = (state, action) => {
   const hitPins = action.payload;
-  if (state.currentTry === 0) {
-    state.game[state.currentRound].firstTry = hitPins;
-    state.currentTry = 1;
-  } else if (state.currentTry === 1) {
-    state.game[state.currentRound].secondTry = hitPins;
-    if (
-      state.game[state.currentRound].firstTry + hitPins === 10 ||
-      state.game[state.currentRound].firstTry === 10
+  if (state.currentRound < 9) {
+    if (state.currentTry === 0) {
+      if (hitPins === 10) {
+        state.game[state.currentRound].firstTry = hitPins;
+        state.currentTry = 0;
+        state.currentRound += 1;
+      } else {
+        state.game[state.currentRound].firstTry = hitPins;
+        state.currentTry = 1;
+      }
+    } else if (
+      state.currentRound === 1 &&
+      state.game[state.currentRound].firstTry + hitPins === 10
     ) {
-      state.currentTry = 2;
-    } else {
-      state.isGameFinished = true;
-    }
-  } else if (state.currentTry === 2) {
-    state.game[state.currentRound].thirdTry = hitPins;
-    state.isGameFinished = true;
-  }
-};
-const nineRoundsScoreUpdate = (state, action) => {
-  const hitPins = action.payload;
-  if (state.currentTry === 0) {
-    if (hitPins === 10) {
-      state.game[state.currentRound].firstTry = hitPins;
+      state.game[state.currentRound].secondTry = hitPins;
       state.currentTry = 0;
       state.currentRound += 1;
     } else {
+      state.game[state.currentRound].secondTry = hitPins;
+      state.currentTry = 0;
+      state.currentRound += 1;
+    }
+  } else if (state.currentRound === 9) {
+    if (state.currentTry === 0) {
       state.game[state.currentRound].firstTry = hitPins;
       state.currentTry = 1;
+    } else if (state.currentTry === 1) {
+      state.game[state.currentRound].secondTry = hitPins;
+      if (
+        state.game[state.currentRound].firstTry + hitPins === 10 ||
+        state.game[state.currentRound].firstTry === 10
+      ) {
+        state.currentTry = 2;
+      } else {
+        state.isGameFinished = true;
+      }
+    } else if (state.currentTry === 2) {
+      state.game[state.currentRound].thirdTry = hitPins;
+      state.isGameFinished = true;
     }
-  } else if (
-    state.currentRound === 1 &&
-    state.game[state.currentRound].firstTry + hitPins === 10
-  ) {
-    state.game[state.currentRound].secondTry = hitPins;
-    state.currentTry = 0;
-    state.currentRound += 1;
-  } else {
-    state.game[state.currentRound].secondTry = hitPins;
-    state.currentTry = 0;
-    state.currentRound += 1;
   }
 };
-
 export const { startGame, updateScore, restartGame } = appSlice.actions;
 
 export const selectIsGameStarted = (redux) => redux.app.isGameStarted;

@@ -33,16 +33,17 @@ export const ScoreForm = () => {
 
   const handleInput = (e) => {
     let { value, min, max } = e.target;
+
     value = Math.max(Number(min), Math.min(Number(max), Number(value)));
     setInputValue(parseInt(value));
   };
 
   const hadleSubmit = (e) => {
     e.preventDefault();
-    if (inputValue > 0) {
+    if (inputValue.length !== 0) {
       dispatch(updateScore(Number(inputValue)));
-      maxValue = 10;
       setInputValue("");
+      maxValue = 10;
     }
   };
 

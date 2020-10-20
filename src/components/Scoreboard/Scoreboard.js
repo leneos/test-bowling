@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectIsGameFinished,
@@ -15,15 +15,11 @@ import { ScoreForm } from "../ScoreForm/ScoreForm";
 
 export const Scoreboard = () => {
   const rounds = useSelector(selectRounds);
-
   const screenImgs = useSelector(selectScreenImgs);
   const isGameFinished = useSelector(selectIsGameFinished);
-
   const roundScore = useSelector(selectRoundScore);
-
   const dispatch = useDispatch();
 
-  useEffect(() => {}, []);
   const renderTries = () => {
     return rounds.map((item, index) => {
       return (

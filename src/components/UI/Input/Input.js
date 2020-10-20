@@ -6,8 +6,8 @@ export const Input = ({
   max,
   className,
   type,
-  value,
   placeholder,
+  value,
 }) => {
   return (
     <input
