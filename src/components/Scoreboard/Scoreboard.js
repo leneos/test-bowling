@@ -8,10 +8,11 @@ import {
   restartGame,
 } from "../../redux/appSlice";
 import { ScoreBox } from "../ScoreBox/ScoreBox";
-import { Input } from "../UI/Input/Input";
 import { Screen } from "../Screen/Screen";
 import "./Scoreboard.scss";
 import { Button } from "../UI/Button/Button";
+import { ScoreForm } from "../ScoreForm/ScoreForm";
+
 export const Scoreboard = () => {
   const rounds = useSelector(selectRounds);
 
@@ -58,7 +59,7 @@ export const Scoreboard = () => {
             />
           </>
         ) : (
-          <Input />
+          <ScoreForm />
         )}
       </div>
     </div>
